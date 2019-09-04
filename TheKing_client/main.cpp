@@ -1,10 +1,19 @@
 ﻿#include <QApplication>
-#include "myconnect.h"
+//#include "mylog.h"
+#include "mythread.h"
+#include "logwidget.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MyConnect conn;
+    //MyLog win;
+    LogWidget win;
+    win.show();
+
+    MyThread *mythread = new MyThread;
+
+    QObject::connect(&win,SIGNAL(do_log(QString,QString)),mythread,SLOT(deal_log(QString,QString)));
+    QObject::connect(&win,SIGNAL(do_CloseServer()),mythread,SLOT(deal_CloseServer()));
 
     return a.exec();
 }

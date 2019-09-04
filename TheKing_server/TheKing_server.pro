@@ -14,14 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     server.cpp \
-    myconnect.cpp \
-    mysql.cpp
+    mysql.cpp \
+    mythread.cpp
 
 HEADERS  += \
     server.h \
-    myconnect.h \
     mysql.h \
-    head.h
+    head.h \
+    mythread.h
 
 FORMS    += \
     server.ui

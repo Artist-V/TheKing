@@ -1,6 +1,5 @@
 ﻿#ifndef MYSQL_H
 #define MYSQL_H
-
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlQuery>

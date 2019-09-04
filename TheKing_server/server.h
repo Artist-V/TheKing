@@ -2,7 +2,6 @@
 #define SERVER_H
 #pragma execution_character_set("utf-8")
 #include <QWidget>
-#include "myconnect.h"
 #include <head.h>
 
 namespace Ui {
@@ -17,14 +16,11 @@ public:
     explicit Server(QWidget *parent = 0);
     ~Server();
 
+signals:
+    void do_OpenServer();
+    void do_CloseServer();
 private:
     Ui::Server *ui;
-
-private:
-    MyConnect *myconn;
-
-public:
-    void init_sql();
 
 private slots:
     void on_OpenButton_clicked();

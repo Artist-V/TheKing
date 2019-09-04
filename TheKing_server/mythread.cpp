@@ -1,29 +1,35 @@
-﻿#include "myconnect.h"
-#include <QMessageBox>
+﻿#include "mythread.h"
+#include <QDebug>
+#include <QDataStream>
 
-MyConnect::MyConnect(QObject *parent) : QObject(parent)
+MyThread::MyThread(QObject *parent) : QThread(parent)
 {
+
     //初始化
     mysql = new MySql(this);
 
     Tserver = new QTcpServer(this);
     Tsocket = new QTcpSocket(this);
 }
-
-MyConnect::~MyConnect()
+MyThread::~MyThread()
 {
     delete Tserver;
     //断连
     delete Tsocket;
 }
-void MyConnect::deal_CloseServer()
+
+void MyThread::run()
+{
+
+}
+void MyThread::deal_CloseServer()
 {
     Tserver->close();
     Tsocket->close();
 }
 
 //等server窗口点击“开启服务器”才初始化
-void MyConnect::init_server()
+void MyThread::init_server()
 {
     quint16 port = 9090;
     Tserver->listen(QHostAddress::Any,port);
@@ -31,7 +37,7 @@ void MyConnect::init_server()
     connect(Tserver,SIGNAL(newConnection()),this,SLOT(deal_connect()));
 }
 
-void MyConnect::deal_connect()
+void MyThread::deal_connect()
 {
     Tsocket = Tserver->nextPendingConnection();
     nc_t nc;
@@ -47,7 +53,7 @@ void MyConnect::deal_connect()
     connect(Tsocket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(deal_connect_error()));
 }
 
-void MyConnect::deal_disconnect()
+void MyThread::deal_disconnect()
 {
     nc_t nc;
     nc.ip = Tsocket->peerAddress().toString();
@@ -58,12 +64,12 @@ void MyConnect::deal_disconnect()
     emit do_Connect(nc);
 }
 
-void MyConnect::deal_connect_error()
+void MyThread::deal_connect_error()
 {
     emit do_String(QString("服务器异常！"));
 }
 
-void MyConnect::deal_read()
+void MyThread::deal_read()
 {
     QByteArray data;
     Tsocket->readAll();
@@ -96,6 +102,12 @@ void MyConnect::deal_read()
             }
             break;
     }
-
 }
 
+
+//stopped = false;
+
+//void MyThread::stop()
+//{
+//    stopped = true;
+//}

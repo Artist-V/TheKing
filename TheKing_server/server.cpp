@@ -11,12 +11,6 @@ Server::Server(QWidget *parent) :
     this->setWindowTitle(tr("TheKing Server :9090"));
     this->setWindowIcon(QPixmap(":/icon/熊猫.png"));
 
-    //初始化
-    myconn = new MyConnect();
-    connect(myconn,SIGNAL(do_Connect(nc_t)),this,SLOT(deal_Connect(nc_t)));
-    connect(myconn,SIGNAL(do_String(QString)),this,SLOT(deal_String(QString)));
-    connect(myconn,SIGNAL(do_message(QDataStream)),this,SLOT(deal_Message(QDataStream)));
-
 }
 
 Server::~Server()
@@ -24,24 +18,21 @@ Server::~Server()
     delete ui;
 }
 
-void Server::init_sql()
-{
-
-}
-
 //开启服务器
 void Server::on_OpenButton_clicked()
 {
     //开启服务
     ui->textBrowser->append(QString("----------开启服务器----------"));
-    myconn->init_server();
+    //myconn->init_server();
+    emit do_OpenServer();
 
 }
 //关闭服务器
 void Server::on_CloseButton_clicked()
 {
     ui->textBrowser->append(QString("----------关闭服务器----------"));
-    myconn->deal_CloseServer();
+    //myconn->deal_CloseServer();
+    emit do_CloseServer();
 }
 
 void Server::deal_String(QString str)

@@ -1,18 +1,20 @@
-﻿#ifndef MYCONNECT_H
-#define MYCONNECT_H
+﻿#ifndef MYTHREAD_H
+#define MYTHREAD_H
 #pragma execution_character_set("utf-8")
-#include <QObject>
+#include <QThread>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <head.h>
 #include "mysql.h"
 
-class MyConnect : public QObject
+class MyThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit MyConnect(QObject *parent = 0);
-    ~MyConnect();
+    explicit MyThread(QObject *parent = 0);
+    ~MyThread();
+protected:
+    void run();
 
 signals:
     void do_Connect(nc_t nc);
@@ -20,17 +22,21 @@ signals:
     void do_message(msg_t msg);
 
 public slots:
+    void init_server();
     void deal_connect();
     void deal_disconnect();
     void deal_connect_error();
     void deal_read();
     void deal_CloseServer();
+
 private:
     QTcpServer *Tserver;
     QTcpSocket *Tsocket;
     MySql *mysql;
-public:
-    void init_server();
+
 };
 
-#endif // MYCONNECT_H
+#endif // MYTHREAD_H
+
+//void stop();
+//volatile bool stopped;  //在任何时候都保持最新的值，避免在多个线程中访问出错

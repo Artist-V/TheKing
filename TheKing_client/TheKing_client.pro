@@ -13,29 +13,28 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mylog.cpp \
-    myconnect.cpp \
     mainwindow.cpp \
-    myreg.cpp \
     myanser.cpp \
     mypaper.cpp \
-    mysingleanser.cpp
+    mysingleanser.cpp \
+    mythread.cpp \
+    logwidget.cpp
 
-HEADERS  += mylog.h \
-    myconnect.h \
+HEADERS  += \
     mainwindow.h \
-    myreg.h \
     myanser.h \
     mypaper.h \
     mysingleanser.h \
-    head.h
+    head.h \
+    mythread.h \
+    logwidget.h
 
-FORMS    += mylog.ui \
+FORMS    += \
     mainwindow.ui \
-    myreg.ui \
     myanser.ui \
     mypaper.ui \
-    mysingleanser.ui
+    mysingleanser.ui \
+    logwidget.ui
 
 RESOURCES += \
     res.qrc
