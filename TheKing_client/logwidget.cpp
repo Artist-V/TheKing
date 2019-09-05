@@ -43,10 +43,16 @@ LogWidget::~LogWidget()
 
 void LogWidget::on_login_Button_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(1);
+
 }
 
 void LogWidget::on_Exit_pushButton_clicked()
 {
+    emit do_CloseServer();
+    this->close();
+}
 
+void LogWidget::on_reg_pushButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
 }

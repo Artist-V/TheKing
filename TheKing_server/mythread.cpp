@@ -7,8 +7,6 @@ MyThread::MyThread(QObject *parent) : QThread(parent)
 
     //初始化
     mysql = new MySql(this);
-
-    Tserver = new QTcpServer(this);
     Tsocket = new QTcpSocket(this);
 }
 MyThread::~MyThread()
@@ -20,7 +18,7 @@ MyThread::~MyThread()
 
 void MyThread::run()
 {
-
+    QTcpSocket *Tsocket;
 }
 void MyThread::deal_CloseServer()
 {

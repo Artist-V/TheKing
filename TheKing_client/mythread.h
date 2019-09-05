@@ -23,9 +23,9 @@ public slots:
 
 public:
     void deal_SendMessage(MessageType type);
+    void run();
 
 private:
-    QTcpSocket *Tsocket;
     QString name;
     QString pwd;
 };

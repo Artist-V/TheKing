@@ -26,6 +26,7 @@ signals:
 private slots:
     void on_login_Button_clicked();
     void on_Exit_pushButton_clicked();
+    void on_reg_pushButton_clicked();
 
 private:
     QMovie *movie;
