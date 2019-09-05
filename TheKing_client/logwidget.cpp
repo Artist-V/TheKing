@@ -43,7 +43,7 @@ LogWidget::~LogWidget()
 
 void LogWidget::on_login_Button_clicked()
 {
-
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
 void LogWidget::on_Exit_pushButton_clicked()
