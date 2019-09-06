@@ -17,17 +17,16 @@ protected:
     void run();
 
 signals:
-    void do_Connect(nc_t nc);
-    void do_String(QString str);
-    void do_message(msg_t msg);
+    void do_String(QString);
+    void do_message(msg_t);
+    void send_ipandport(QString,int); //连接服务器的客户端IP/PORT
 
 public slots:
-    void init_server();
-    void deal_connect();
-    void deal_disconnect();
-    void deal_connect_error();
-    void deal_read();
-    void deal_CloseServer();
+    void deal_connect(); //处理连接
+    void deal_read();    //处理接收数据
+
+public:
+    void SendToClient(MessageType type); //向客户端发送消息
 
 private:
     QTcpServer *Tserver;
@@ -38,5 +37,3 @@ private:
 
 #endif // MYTHREAD_H
 
-//void stop();
-//volatile bool stopped;  //在任何时候都保持最新的值，避免在多个线程中访问出错

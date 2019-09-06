@@ -1,5 +1,7 @@
 ﻿#include "logwidget.h"
 #include "ui_logwidget.h"
+#include <QMessageBox>
+
 
 LogWidget::LogWidget(QWidget *parent) :
     QWidget(parent),
@@ -13,7 +15,7 @@ LogWidget::LogWidget(QWidget *parent) :
     //动图
     movie = new QMovie(":/pic/pic1.gif");
     ui->img_label->setMovie(movie);
-    ui->img_label->setFixedSize(380,130);
+    ui->img_label->setFixedSize(565,130);
     movie->start();
     ui->img_label_2->setMovie(movie);
     ui->img_label_2->setFixedSize(565,130);
@@ -26,6 +28,7 @@ LogWidget::LogWidget(QWidget *parent) :
     QRegExp re2("^[A-Za-z0-9]{1,10}$");      ////由数字和26个英文字母组成的字符串
     ui->name_lineEdit->setValidator(new QRegExpValidator(re1,this));
     ui->pwd_lineEdit->setValidator(new QRegExpValidator(re2,this));
+
     //注册控件
     ui->name_lineEdit_2->setPlaceholderText(tr("长度[0,9]支持中文、英文、数字、下划线"));
     ui->pwd_lineEdit_2->setPlaceholderText(tr("长度[0,10]支持英文和数字"));
@@ -43,16 +46,66 @@ LogWidget::~LogWidget()
 
 void LogWidget::on_login_Button_clicked()
 {
+    MainWindow *win = new MainWindow();
+    win->show();
+    this->hide();
 
+    connect(win,SIGNAL(do_online_show()),this,SLOT(deal_single_show()));
+    connect(win,SIGNAL(do_single_show()),this,SLOT(deal_single_show()));
+
+    //emit do_log(ui->name_lineEdit->text(),ui->pwd_lineEdit->text());
 }
 
 void LogWidget::on_Exit_pushButton_clicked()
 {
-    emit do_CloseServer();
     this->close();
 }
 
 void LogWidget::on_reg_pushButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(1);
+
+    ui->name_lineEdit->clear();
+    ui->pwd_lineEdit->clear();
+}
+void LogWidget::on_Exit_pushButton_2_clicked()
+{
+    deal_reg_success();
+}
+void LogWidget::deal_log_success()
+{
+//    MainWindow *win = new MainWindow();
+//    win->show();
+//    this->hide();
+
+//    connect(win,SIGNAL(do_online_show()),this,SLOT(deal_single_show()));
+//    connect(win,SIGNAL(do_single_show()),this,SLOT(deal_single_show()));
+
+}
+
+void LogWidget::deal_reg_success()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+
+    ui->name_lineEdit_2->clear();
+    ui->pwd_lineEdit_2->clear();
+    ui->confirn_pwd_lineEdit->clear();
+}
+
+void LogWidget::deal_message(QString message)
+{
+    QMessageBox::warning(this,"警告",message);
+}
+
+
+void LogWidget::deal_single_show()
+{
+    MySingleAnser * single = new MySingleAnser();
+    single->show();
+}
+
+void LogWidget::deal_online_show()
+{
+    MyAnser * online = new MyAnser();
+    online->show();
 }

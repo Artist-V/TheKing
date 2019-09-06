@@ -6,14 +6,18 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    //MyLog win;
+
     LogWidget win;
     win.show();
 
     MyThread *mythread = new MyThread;
+    mythread->start();
 
     QObject::connect(&win,SIGNAL(do_log(QString,QString)),mythread,SLOT(deal_log(QString,QString)));
-    QObject::connect(&win,SIGNAL(do_CloseServer()),mythread,SLOT(deal_CloseServer()));
+
+    QObject::connect(mythread,SIGNAL(do_log_success()),&win,SLOT(deal_log_success()));
+    QObject::connect(mythread,SIGNAL(do_reg_success()),&win,SLOT(deal_reg_success()));
+    QObject::connect(mythread,SIGNAL(do_message(QString)),&win,SLOT(deal_message(QString)));
 
     return a.exec();
 }

@@ -15,3 +15,13 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_single_Button_clicked()
+{
+    emit do_single_show();
+}
+
+void MainWindow::on_online_Button_clicked()
+{
+    emit do_online_show();
+}

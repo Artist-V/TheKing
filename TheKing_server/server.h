@@ -2,7 +2,8 @@
 #define SERVER_H
 #pragma execution_character_set("utf-8")
 #include <QWidget>
-#include <head.h>
+#include "head.h"
+#include "mythread.h"
 
 namespace Ui {
 class Server;
@@ -15,19 +16,20 @@ class Server : public QWidget
 public:
     explicit Server(QWidget *parent = 0);
     ~Server();
-
-signals:
-    void do_OpenServer();
-    void do_CloseServer();
 private:
     Ui::Server *ui;
+
+signals:
 
 private slots:
     void on_OpenButton_clicked();
     void on_CloseButton_clicked();
-    void deal_Connect(nc_t nc);
-    void deal_String(QString str);
-    void deal_Message(msg_t msg);
+    void deal_recv_ipandport(QString,int);  //连接的客户端IP/PORT
+
+private:
+    MyThread *mythread;
+
+
 };
 
 #endif // SERVER_H

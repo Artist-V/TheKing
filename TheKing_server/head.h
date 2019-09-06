@@ -2,23 +2,23 @@
 #define HEAD_H
 #include <QString>
 
-typedef struct connect{
-    QString ip;
-    quint16 port;
-    QString str;
-}nc_t;
+enum MessageType
+{
+    LOG = 0x1010,    //登录
+    REG,             //注册
+    TOPIC,           //题目
+
+    LOGSUC,
+    LOGFAIL,
+    REGSUC,
+    REGFAIL
+};
 
 typedef struct message{
     QString name;
     QString pwd;
-    //QString str;
+    int action;
+
 }msg_t;
-
-enum MessageType
-{
-    Message,        //信息
-    LOG             //登录
-
-};
 
 #endif // HEAD_H

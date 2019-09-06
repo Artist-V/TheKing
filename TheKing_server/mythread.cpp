@@ -5,107 +5,125 @@
 MyThread::MyThread(QObject *parent) : QThread(parent)
 {
 
-    //初始化
-    mysql = new MySql(this);
-    Tsocket = new QTcpSocket(this);
 }
 MyThread::~MyThread()
 {
     delete Tserver;
-    //断连
     delete Tsocket;
 }
 
 void MyThread::run()
 {
-    QTcpSocket *Tsocket;
-}
-void MyThread::deal_CloseServer()
-{
-    Tserver->close();
-    Tsocket->close();
-}
+    mysql = new MySql();
+    Tsocket = new QTcpSocket();
+    Tserver = new QTcpServer();
 
-//等server窗口点击“开启服务器”才初始化
-void MyThread::init_server()
-{
     quint16 port = 9090;
     Tserver->listen(QHostAddress::Any,port);
-    emit do_String(QString("初始化Tserver,端口号9090"));
+
     connect(Tserver,SIGNAL(newConnection()),this,SLOT(deal_connect()));
+
+    this->exec();
 }
 
+//处理客户端连接
 void MyThread::deal_connect()
 {
     Tsocket = Tserver->nextPendingConnection();
-    nc_t nc;
-    nc.ip = Tsocket->peerAddress().toString();
-    nc.port = Tsocket->peerPort();
-    nc.str = "新客户端连接";
 
-    //server->setTextBrowser(ip,port,"新客户端连接");
-    emit do_Connect(nc);
+    QString ip = Tsocket->peerAddress().toString();
+    int port = Tsocket->peerPort();
+
+    emit send_ipandport(ip,port);
 
     connect(Tsocket,SIGNAL(readyRead()),this,SLOT(deal_read()));
-    connect(Tsocket,SIGNAL(disconnected()),this,SLOT(deal_disconnect()));
-    connect(Tsocket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(deal_connect_error()));
 }
 
-void MyThread::deal_disconnect()
-{
-    nc_t nc;
-    nc.ip = Tsocket->peerAddress().toString();
-    nc.port = Tsocket->peerPort();
-    nc.str = "客户端关闭连接";
 
-    //server->setTextBrowser(ip,port,"客户端关闭连接");
-    emit do_Connect(nc);
-}
-
-void MyThread::deal_connect_error()
-{
-    emit do_String(QString("服务器异常！"));
-}
-
+//通信数据处理
 void MyThread::deal_read()
 {
     QByteArray data;
-    Tsocket->readAll();
     QDataStream in(&data,QIODevice::ReadOnly);
+
+    data = Tsocket->readAll();
 
     int type;
     in >> type;
 
-    //QString name,pwd;
-    nc_t nc;
-    nc.ip = Tsocket->peerAddress().toString();
-    nc.port = Tsocket->peerPort();
+    QString ip = Tsocket->peerAddress().toString();
+    int port = Tsocket->peerPort();
 
     msg_t msg;
+    memset(&msg,0,sizeof(msg_t));
+
     switch(type)
     {
+//登录
         case LOG:
             qDebug()<<"read : LOG";
-
+            msg.action = LOG;
             in >> msg.name >> msg.pwd ;
 
-            //检查用户名和密码
+    //检查用户名和密码
             if(mysql->check_uid(msg.name,msg.pwd))
             {
+                //登录成功
                 emit do_message(msg);
+                SendToClient(LOGSUC);
             }
             else
             {
-                emit do_String(QString("IP[%1] port[%2]用户登陆失败").arg(nc.ip).arg(QString::number(nc.port)));
+                //登录失败
+                emit do_String(QString("IP[%1] port[%2] 用户登陆失败").arg(ip).arg(QString::number(port)));
+                SendToClient(LOGFAIL);
+            }
+            break;
+//注册
+    case REG:
+            qDebug()<<"read : REG";
+            msg.action = REG;
+            in >> msg.name >> msg.pwd ;
+
+    //检查用户名是否存在
+            if(mysql->check_insert(msg.name))
+            {
+                //注册成功
+                emit do_message(msg);
+                SendToClient(REGSUC);
+            }
+            else
+            {
+                //注册失败
+                emit do_String(QString("IP[%1] port[%2] 用户注册失败").arg(ip).arg(QString::number(port)));
+                SendToClient(REGFAIL);
             }
             break;
     }
 }
 
+//向客户端发送数据
+void MyThread::SendToClient(MessageType type)
+{
+    QByteArray data;
+    QDataStream out(&data,QIODevice::WriteOnly);
 
-//stopped = false;
+    out << type ;
 
-//void MyThread::stop()
-//{
-//    stopped = true;
-//}
+    switch(type)
+    {
+    case LOGSUC:
+            qDebug() << "send : LOGSUC";
+            break;
+    case LOGFAIL:
+            qDebug() << "send : LOGFAIL";
+            break;
+    case REGSUC:
+            qDebug() << "send : REGSUC";
+            break;
+    case REGFAIL:
+            qDebug() << "send : REGFAIL";
+            break;
+    }
+    Tsocket->write(data);
+}
