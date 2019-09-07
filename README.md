@@ -62,3 +62,13 @@ A：pushButton->setEnabled(false);
   }
 
 ```
+
+8. Qt主线程循环
+* Qt一般使用QThread::sleep()来延时，但是这样会阻塞住线程，ui也会停着不动
+* 事件循环 <===>  防止界面卡死
+  * 类似于一个事件队列，对列入的事件依次的进行处理，当时间做完而时间循环没有结束的时候，其实际上比较类似于一个不占用CPU事件的for(;;)循环
+  * 程序在exec()里面无限循环，能让跟在exec()后面的代码得不到运行机会，直至程序从exec()跳出。从exec()跳出时，事件循环即被终止。QEventLoop::quit()能够终止事件循环
+  * QEventLoop::exec()的时候，虽然这些exec()打断了main()中的QApplication::exec()，但是由于GUI界面的响应已经被包含到子循环中了，所以GUI界面依然能够得到响应
+  * 调用传统的Sleep，这时候程序会阻塞；所以开启本地事件循环，搭配QTimer::singleShot(int msec, const QObject * receiver, const char * member) 静态函数会在给定的时间间隔之后调用一个member槽函数。（时间间隔为msec毫秒）
+
+
