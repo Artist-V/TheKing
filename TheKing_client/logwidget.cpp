@@ -24,8 +24,8 @@ LogWidget::LogWidget(QWidget *parent) :
     ui->name_lineEdit->setPlaceholderText(tr("用户名/ID号"));
     ui->pwd_lineEdit->setPlaceholderText(tr("请输入密码"));
     ui->pwd_lineEdit->setEchoMode(QLineEdit::Password);
-    QRegExp re1("^[A-Za-z0-9_]{1,9}$");       ////由数字、26个英文字母或者下划线组成的字符串
-    QRegExp re2("^[A-Za-z0-9]{1,10}$");      ////由数字和26个英文字母组成的字符串
+    QRegExp re1("^[A-Za-z0-9_]{1,9}$");       ////由“数字、26个英文字母、下划线”组成的字符串
+    QRegExp re2("^[A-Za-z0-9]{1,10}$");      ////由“数字、26个英文字母”组成的字符串
     ui->name_lineEdit->setValidator(new QRegExpValidator(re1,this));
     ui->pwd_lineEdit->setValidator(new QRegExpValidator(re2,this));
 
@@ -33,7 +33,7 @@ LogWidget::LogWidget(QWidget *parent) :
     ui->name_lineEdit_2->setPlaceholderText(tr("长度[0,9]支持中文、英文、数字、下划线"));
     ui->pwd_lineEdit_2->setPlaceholderText(tr("长度[0,10]支持英文和数字"));
     ui->confirn_pwd_lineEdit->setPlaceholderText(tr("长度[0,10]支持英文和数字"));
-    ui->name_lineEdit_2->setEchoMode(QLineEdit::Password);
+    //ui->name_lineEdit_2->setEchoMode(QLineEdit::Password);
     ui->confirn_pwd_lineEdit->setEchoMode(QLineEdit::Password);
     ui->name_lineEdit_2->setValidator(new QRegExpValidator(re1,this));
     ui->pwd_lineEdit_2->setValidator(new QRegExpValidator(re2,this));
