@@ -2,6 +2,7 @@
 #define HEAD_H
 #include <QString>
 
+/*通信状态码*/
 enum MessageType
 {
     LOG = 0x1010,    //登录
@@ -14,10 +15,11 @@ enum MessageType
     REGFAIL
 };
 
+/*通信消息包*/
 typedef struct message{
     QString name;
     QString pwd;
-    int action;
+    MessageType action;
 
 }msg_t;
 

@@ -1,5 +1,4 @@
 ﻿#include <QApplication>
-//#include "mylog.h"
 #include "mythread.h"
 #include "logwidget.h"
 
@@ -34,12 +33,12 @@ int main(int argc, char *argv[])
  * *定时器：答题、切换题目的时间
  * **槽函数：开始答题，定时器启动，题目显示
  * **槽函数：点击答案，对比答案与正确答案，正确（绿色）/错误（红色），答对（加分）/答错（不加分）
- * **槽函数：点击跳过，跳过题目，换到下一题
  * **槽函数：定时器时间到，切换下一题
  *
+ * MySingleAnser:单机答题
  * MyAnser:联机答题
- * MyLog:登录 / MyReg:注册
- * MyConnect:通信
+ * LogWidget:登录+注册
+ * MyThread:通信
  * *
  *
  *

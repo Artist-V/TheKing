@@ -46,11 +46,12 @@ LogWidget::~LogWidget()
 
 void LogWidget::on_login_Button_clicked()
 {
+//测试
     MainWindow *win = new MainWindow();
     win->show();
     this->hide();
 
-    connect(win,SIGNAL(do_online_show()),this,SLOT(deal_single_show()));
+    connect(win,SIGNAL(do_online_show()),this,SLOT(deal_online_show()));
     connect(win,SIGNAL(do_single_show()),this,SLOT(deal_single_show()));
 
     //emit do_log(ui->name_lineEdit->text(),ui->pwd_lineEdit->text());
@@ -108,4 +109,9 @@ void LogWidget::deal_online_show()
 {
     MyAnser * online = new MyAnser();
     online->show();
+}
+
+void LogWidget::on_reg_Button_clicked()
+{
+
 }

@@ -33,6 +33,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="single_Button">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="text">
        <string>单机答题</string>
       </property>
