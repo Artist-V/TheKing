@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     mypaper.cpp \
     mysingleanser.cpp \
     mythread.cpp \
-    logwidget.cpp
+    logwidget.cpp \
+    myjudge.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -27,7 +28,8 @@ HEADERS  += \
     mysingleanser.h \
     head.h \
     mythread.h \
-    logwidget.h
+    logwidget.h \
+    myjudge.h
 
 FORMS    += \
     mainwindow.ui \

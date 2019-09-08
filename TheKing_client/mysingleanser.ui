@@ -35,7 +35,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;3.请选择你认为正确的选项；&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;4.若选择正确，则系统提示选择正确（绿色）；&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;  若选择错误，则系统提示选择错误（红色）；&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;5.答对加1分，答错不扣分;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;5.答对加20分，答错不扣分;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -143,7 +143,10 @@ p, li { white-space: pre-wrap; }
              </size>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -194,7 +197,10 @@ p, li { white-space: pre-wrap; }
              </size>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -377,7 +383,7 @@ p, li { white-space: pre-wrap; }
           <item row="0" column="2">
            <widget class="QLabel" name="score_label_2">
             <property name="text">
-             <string/>
+             <string>0</string>
             </property>
            </widget>
           </item>
@@ -404,14 +410,14 @@ p, li { white-space: pre-wrap; }
           <item row="2" column="2">
            <widget class="QLabel" name="time_label_2">
             <property name="text">
-             <string/>
+             <string>0</string>
             </property>
            </widget>
           </item>
           <item row="1" column="2">
            <widget class="QLabel" name="num_label">
             <property name="text">
-             <string/>
+             <string>0</string>
             </property>
            </widget>
           </item>

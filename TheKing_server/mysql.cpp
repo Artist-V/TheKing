@@ -1,5 +1,6 @@
 ﻿#include "mysql.h"
 #include <QDebug>
+#include <QTime>
 
 MySql::MySql(QObject *parent) : QObject(parent)
 {
@@ -94,6 +95,40 @@ void MySql::update(QString type,QString uid, QString something)
         sql = QString("update user set upwd='%1' where uid = '%2'").arg(something).arg(uid);
     }
     query.exec(sql);
+}
+
+void MySql::Generate_Random_single(int num)
+{
+    QSqlQuery query(db);
+    QString sql = QString("select * from questionbank order by rand() limit %1").arg(QString::number(num));
+    query.exec(sql);
+     while(query.next())
+     {
+         emit Send_topic_single(query.value(1).toString(),\
+                         query.value(2).toString(),\
+                         query.value(3).toString(),\
+                         query.value(4).toString(),\
+                         query.value(5).toString(),\
+                         query.value(6).toInt());
+     }
+}
+
+void MySql::Generate_Random(int num,int room)
+{
+    QSqlQuery query(db);
+    QString sql = QString("select * from questionbank order by rand() limit %1").arg(QString::number(num));
+    query.exec(sql);
+     while(query.next())
+     {
+         emit Send_topic(query.value(1).toString(),\
+                         query.value(2).toString(),\
+                         query.value(3).toString(),\
+                         query.value(4).toString(),\
+                         query.value(5).toString(),\
+                         query.value(6).toInt(),\
+                         room);
+     }
+
 }
 
 

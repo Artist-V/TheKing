@@ -25,6 +25,8 @@ private slots:
     void on_OpenButton_clicked();
     void on_CloseButton_clicked();
     void deal_recv_ipandport(QString,int);  //连接的客户端IP/PORT
+    void deal_message(QString,int,QString,QString);
+    void deal_request(QString,int,QString,int);
 
 private:
     MyThread *mythread;

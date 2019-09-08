@@ -50,3 +50,15 @@ void Server::deal_recv_ipandport(QString ip, int port)
     ui->textBrowser->append(QString("[new] client connect IP[%1],PORT[%2] ").arg(ip).arg(QString::number(port)));
 }
 
+void Server::deal_message(QString ip,int port,QString name,QString message)
+{
+    ui->textBrowser->append(QString("ip[%1],port[%2] client[%3]:[%4]").\
+                            arg(ip).arg(QString::number(port)).arg(name).arg(message));
+}
+
+void Server::deal_request(QString ip,int port,QString name,int topic)
+{
+    ui->textBrowser->append(QString("ip[%1],port[%2] client[%3] request %4 Anser Sheet").\
+                            arg(ip).arg(QString::number(port)).arg(name).arg(QString::number(topic)));
+}
+

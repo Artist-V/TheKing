@@ -1,6 +1,7 @@
 ﻿#include <QApplication>
 #include "mythread.h"
 #include "logwidget.h"
+#include "mysingleanser.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,11 +13,16 @@ int main(int argc, char *argv[])
     MyThread *mythread = new MyThread;
     mythread->start();
 
-    QObject::connect(&win,SIGNAL(do_log(QString,QString)),mythread,SLOT(deal_log(QString,QString)));
+    QObject::connect(&win,SIGNAL(do_log_check(QString,QString)),mythread,SLOT(deal_log_check(QString,QString)));
+    QObject::connect(&win,SIGNAL(do_reg_check(QString,QString)),mythread,SLOT(deal_reg_check(QString,QString)));
+    QObject::connect(&win,SIGNAL(do_request_single_topic()),mythread,SLOT(deal_request_single_topic()));
+    QObject::connect(&win,SIGNAL(do_SendMessage(QString)),mythread,SLOT(deal_request_single_topic()));
 
     QObject::connect(mythread,SIGNAL(do_log_success()),&win,SLOT(deal_log_success()));
     QObject::connect(mythread,SIGNAL(do_reg_success()),&win,SLOT(deal_reg_success()));
     QObject::connect(mythread,SIGNAL(do_message(QString)),&win,SLOT(deal_message(QString)));
+    QObject::connect(mythread,SIGNAL(do_topic(QString,QString,QString,QString,QString,QString)),\
+                     &win,SLOT(deal_single_start(QString,QString,QString,QString,QString,QString)));
 
     return a.exec();
 }

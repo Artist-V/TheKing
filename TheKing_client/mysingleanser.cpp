@@ -1,6 +1,7 @@
 ﻿#include "mysingleanser.h"
 #include "ui_mysingleanser.h"
 #include <QTimer>
+#include <QDebug>
 
 MySingleAnser::MySingleAnser(QWidget *parent) :
     QMainWindow(parent),
@@ -10,42 +11,21 @@ MySingleAnser::MySingleAnser(QWidget *parent) :
 //ui
     this->setWindowTitle(tr("头脑王者(单机模式)"));
     this->setWindowIcon(QPixmap(":/icon/熊猫.png"));
-//初始化
-    topic.clear();
-    qA.clear();
-    qB.clear();
-    qC.clear();
-    qD.clear();
-    qTrue.clear();
-    TopicNum = 0;
-    CurrenIndex = 0;
-    TrueIndex = 0;
-    option << "A" << "B" << "C" << "D";
 
-//测试
-    topic.push_back("111");
-    qA.push_back("111");
-    qB.push_back("111");
-    qC.push_back("111");
-    qD.push_back("111");
-    qTrue.push_back("A");
+//判决
+    judge = new MyJudge();
 
-    topic.push_back("222");
-    qA.push_back("222");
-    qB.push_back("222");
-    qC.push_back("222");
-    qD.push_back("222");
-    qTrue.push_back("B");
+//每题的计时器
+    OneTime = 30;
+    OneTimerId = new QTimer();
+    connect(OneTimerId,SIGNAL(timeout()),this,SLOT(OneTimerUpdate()));
 
-    topic.push_back("333");
-    qA.push_back("333");
-    qB.push_back("333");
-    qC.push_back("333");
-    qD.push_back("333");
-    qTrue.push_back("C");
-
-    deal_show();
-    ui->stackedWidget->setCurrentIndex(2);
+////测试
+//    judge->test();
+//    deal_show();
+//    ui->stackedWidget->setCurrentIndex(2);
+//    judge->OpenTimer();
+//    OneTimerId->start(1000);
 }
 
 MySingleAnser::~MySingleAnser()
@@ -70,11 +50,12 @@ void MySingleAnser::on_A_Button_clicked()
 
     //检查A选项是否正确
     //更改样式表（正确：红色；错误：绿色）
-    deal_button_result();
+    deal_button_result(1);
 
     //保持1s
-    //QThread::sleep(2);
     deal_loop();
+
+    qDebug() << "\n";
 
     //跳转下一题
     deal_show();
@@ -88,11 +69,12 @@ void MySingleAnser::on_B_Button_clicked()
     ui->D_Button->setEnabled(false);
     //检查B选项是否正确
     //更改样式表（正确：红色；错误：绿色）
-    deal_button_result();
+    deal_button_result(2);
 
     //保持1s
-    //QThread::sleep(2);
     deal_loop();
+
+    qDebug() << "\n";
 
     //跳转下一题
     deal_show();
@@ -107,11 +89,12 @@ void MySingleAnser::on_C_Button_clicked()
 
     //检查C选项是否正确
     //更改样式表（正确：红色；错误：绿色）
-    deal_button_result();
+    deal_button_result(3);
 
     //保持1s
-    //QThread::sleep(2);
     deal_loop();
+
+    qDebug() << "\n";
 
     //跳转下一题
     deal_show();
@@ -126,11 +109,12 @@ void MySingleAnser::on_D_Button_clicked()
 
     //检查D选项是否正确
     //更改样式表（正确：红色；错误：绿色）
-    deal_button_result();
+    deal_button_result(4);
 
     //保持1s
-    //QThread::sleep(2);
     deal_loop();
+
+    qDebug() << "\n";
 
 
     //跳转下一题
@@ -156,24 +140,36 @@ void MySingleAnser::on_OneMoreButton_clicked()
     this->close();
 }
 
-void MySingleAnser::deal_single_start(QString stem,QString A,QString B,QString C,QString D,QString True)
+void MySingleAnser::deal_recv_topix(QString stem,QString A,QString B,QString C,QString D,QString True)
 {
     //题目存入容器中
-    topic.push_back(stem);
-    qA.push_back(A);
-    qB.push_back(B);
-    qC.push_back(C);
-    qD.push_back(D);
-    qTrue.push_back(True);
+    judge->SaveTopic(stem,A,B,C,D,True);
 
     //计入题目数量
-    TopicNum++;
+    judge->SetTopicNum();
 
     //准备完毕，开始答题
-    if(TopicNum == TitleNum)
+    if(judge->CheckTopicNum())
     {
         deal_show();
         ui->stackedWidget->setCurrentIndex(2);
+    }
+}
+
+void MySingleAnser::OneTimerUpdate()
+{
+    if(OneTime)
+    {
+        OneTime--;
+        ui->time_label->setText(QString::number(OneTime));
+    }
+    else
+    {
+        //一题的时间到，换题
+        deal_show();
+
+        //重置计时器
+        OneTime = 30;
     }
 }
 
@@ -195,14 +191,20 @@ void MySingleAnser::deal_show()
     ui->C_Button->setEnabled(true);
     ui->D_Button->setEnabled(true);
 
-    //题目更换
-    ui->topic_textEdit->setText(topic.at(CurrenIndex));
-    ui->A_Button->setText(qA.at(CurrenIndex));
-    ui->B_Button->setText(qB.at(CurrenIndex));
-    ui->C_Button->setText(qC.at(CurrenIndex));
-    ui->D_Button->setText(qD.at(CurrenIndex));
+    if(!judge->Check_CurrentIndex())
+    {
 
-    CurrenIndex++;
+        ui->topic_textEdit->setText(judge->TopicAt());
+        ui->A_Button->setText(judge->qaAt());
+        ui->B_Button->setText(judge->qbAt());
+        ui->C_Button->setText(judge->qcAt());
+        ui->D_Button->setText(judge->qdAt());
+
+        if(!judge->Check_CurrentIndex())
+        {
+            judge->SetCurrentIndex();
+        }
+    }
 }
 
 void MySingleAnser::deal_loop()
@@ -212,14 +214,18 @@ void MySingleAnser::deal_loop()
     loop.exec();
 }
 
-void MySingleAnser::deal_button_result()
+void MySingleAnser::deal_button_result(int index)
 {
-    //显示正确答案
-    QString True = qTrue.at(TrueIndex);
+    judge->Check_Anser(index);
+    ui->score_label->setText(QString::number(judge->GetScore()));
+    ui->score_label->update();
 
-    switch (option.indexOf(True))
+    qDebug() << "judge->GetTrueIndex() = " << judge->GetTrueIndex();
+
+    //显示正确答案
+    switch (judge->GetTrueIndex())
     {
-    case 0:
+    case 1:
         ui->A_Button->setStyleSheet("QPushButton{background-color: rgb(0,255,0)}");
         ui->A_Button->update();
         ui->B_Button->setStyleSheet("QPushButton{background-color: rgb(255,0,0)}");
@@ -229,7 +235,7 @@ void MySingleAnser::deal_button_result()
         ui->D_Button->setStyleSheet("QPushButton{background-color: rgb(255,0,0)}");
         ui->D_Button->update();
         break;
-    case 1:
+    case 2:
         ui->B_Button->setStyleSheet("QPushButton{background-color: rgb(0,255,0)}");
         ui->B_Button->update();
         ui->A_Button->setStyleSheet("QPushButton{background-color: rgb(255,0,0)}");
@@ -239,7 +245,7 @@ void MySingleAnser::deal_button_result()
         ui->D_Button->setStyleSheet("QPushButton{background-color: rgb(255,0,0)}");
         ui->D_Button->update();
         break;
-    case 2:
+    case 3:
         ui->C_Button->setStyleSheet("QPushButton{background-color: rgb(0,255,0)}");
         ui->C_Button->update();
         ui->A_Button->setStyleSheet("QPushButton{background-color: rgb(255,0,0)}");
@@ -249,7 +255,7 @@ void MySingleAnser::deal_button_result()
         ui->D_Button->setStyleSheet("QPushButton{background-color: rgb(255,0,0)}");
         ui->D_Button->update();
         break;
-    case 3:
+    case 4:
         ui->D_Button->setStyleSheet("QPushButton{background-color: rgb(0,255,0)}");
         ui->D_Button->update();
         ui->A_Button->setStyleSheet("QPushButton{background-color: rgb(255,0,0)}");
@@ -260,6 +266,32 @@ void MySingleAnser::deal_button_result()
         ui->C_Button->update();
         break;
     }
-    TrueIndex++;
+    if(!judge->Check_CurrentIndex())
+    {
+        judge->SetTrueIndex();
+    }
+    else
+    {
+        //ui显示结果，暂停定时器
+        Result();
+        //显示最后一页
+        ui->stackedWidget->setCurrentIndex(3);
+    }
+
+    //重置
+    OneTime = 30;
+}
+
+void MySingleAnser::Result()
+{
+    OneTimerId->stop();
+    judge->CloseTimer();
+
+    ui->score_label_2->setText(QString::number(judge->GetScore()));
+    ui->score_label_2->update();
+    ui->time_label_2->setText(QString::number(judge->getTime()));
+    ui->time_label_2->update();
+    ui->num_label->setText(QString::number(judge->GetTopicNum()));
+    ui->num_label->update();
 }
 

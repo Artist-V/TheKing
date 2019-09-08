@@ -25,3 +25,13 @@ void MainWindow::on_online_Button_clicked()
 {
     emit do_online_show();
 }
+
+void MainWindow::do_RecvMessage(QString name, QString time, QString message)
+{
+    ui->textBrowser->append(QString("[%1](%2) : %3").arg(name).arg(time).arg(message));
+}
+
+void MainWindow::on_send_Button_clicked()
+{
+    emit do_SendMessage(ui->lineEdit->text());
+}

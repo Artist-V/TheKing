@@ -46,15 +46,28 @@ LogWidget::~LogWidget()
 
 void LogWidget::on_login_Button_clicked()
 {
-//测试
-    MainWindow *win = new MainWindow();
-    win->show();
-    this->hide();
+    if(ui->name_lineEdit->text().isEmpty() || ui->pwd_lineEdit->text().isEmpty())
+    {
+        QMessageBox::warning(this,"警告","输入不可为空!",QMessageBox::Ok);
+    }
+    else
+    {
+        emit do_log_check(ui->name_lineEdit->text(),ui->pwd_lineEdit->text());
+    }
+}
 
-    connect(win,SIGNAL(do_online_show()),this,SLOT(deal_online_show()));
-    connect(win,SIGNAL(do_single_show()),this,SLOT(deal_single_show()));
-
-    //emit do_log(ui->name_lineEdit->text(),ui->pwd_lineEdit->text());
+void LogWidget::on_reg_Button_clicked()
+{
+    if(QString::compare(ui->pwd_lineEdit_2->text(),ui->confirn_pwd_lineEdit->text()) == 0)
+    {
+        emit do_reg_check(ui->name_lineEdit_2->text(),ui->pwd_lineEdit_2->text());
+    }
+    else
+    {
+        QMessageBox::warning(this,"警告","输入密码不一致，请重新输入",QMessageBox::Ok);
+        ui->pwd_lineEdit_2->clear();
+        ui->confirn_pwd_lineEdit->clear();
+    }
 }
 
 void LogWidget::on_Exit_pushButton_clicked()
@@ -73,14 +86,16 @@ void LogWidget::on_Exit_pushButton_2_clicked()
 {
     deal_reg_success();
 }
+
 void LogWidget::deal_log_success()
 {
-//    MainWindow *win = new MainWindow();
-//    win->show();
-//    this->hide();
+    MainWindow *win = new MainWindow();
+    win->show();
+    this->hide();
 
-//    connect(win,SIGNAL(do_online_show()),this,SLOT(deal_single_show()));
-//    connect(win,SIGNAL(do_single_show()),this,SLOT(deal_single_show()));
+    connect(win,SIGNAL(do_online_show()),this,SLOT(deal_online_show()));
+    connect(win,SIGNAL(do_single_show()),this,SLOT(deal_single_show()));
+    connect(win,SIGNAL(do_SendMessage(QString)),this,SLOT(deal_online_show()));
 
 }
 
@@ -101,17 +116,53 @@ void LogWidget::deal_message(QString message)
 
 void LogWidget::deal_single_show()
 {
-    MySingleAnser * single = new MySingleAnser();
+    single = new MySingleAnser();
     single->show();
+
+    connect(single,SIGNAL(do_single_start()),this,SLOT(deal_single_start()));
+    connect(single,SIGNAL(do_MainWindow_show()),this,SLOT(deal_log_success()));
+    connect(single,SIGNAL(do_SingleAnser_show()),this,SLOT(deal_single_show()));
+
 }
 
 void LogWidget::deal_online_show()
 {
-    MyAnser * online = new MyAnser();
+    online = new MyAnser();
     online->show();
+
+    connect(online,SIGNAL(do_online_match()),this,SLOT(deal_online_match()));
+    connect(online,SIGNAL(do_MainWindow_show()),this,SLOT(deal_log_success()));
+    connect(online,SIGNAL(do_OnlineAnser_show()),this,SLOT(deal_online_show()));
+    connect(online,SIGNAL(do_anser_true()),this,SLOT(deal_anser_true()));
 }
 
-void LogWidget::on_reg_Button_clicked()
+void LogWidget::deal_SendMessage(QString s)
 {
-
+    emit do_SendMessage(s);
 }
+
+void LogWidget::deal_RecvMessage(QString name, QString time, QString message)
+{
+    emit do_RecvMessage(name,time,message);
+}
+
+void LogWidget::deal_single_start()
+{
+    emit do_request_single_topic();
+}
+
+void LogWidget::deal_online_match()
+{
+    emit do_online_match();
+}
+
+void LogWidget::deal_anser_true()
+{
+    emit do_anser_true();
+}
+
+void LogWidget::deal_topic_start(QString stem , QString a, QString b , QString c, QString d, QString True)
+{
+    single->deal_recv_topix(stem,a,b,c,d,True);
+}
+
