@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="StartPage">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -159,7 +159,10 @@ p, li { white-space: pre-wrap; }
              </size>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -204,7 +207,10 @@ p, li { white-space: pre-wrap; }
                </size>
               </property>
               <property name="text">
-               <string/>
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -369,7 +375,10 @@ p, li { white-space: pre-wrap; }
              </size>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>

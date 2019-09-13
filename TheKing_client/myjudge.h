@@ -62,8 +62,8 @@ public:
     /*功能：检查答案*/
     bool Check_Anser(int);
 
-//    //测试
-//    void test();
+    //测试
+    void test();
 
 private:
     QVector<QString> topic;

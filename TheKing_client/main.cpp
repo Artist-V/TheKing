@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     QObject::connect(mythread,SIGNAL(do_reg_success()),&win,SLOT(deal_reg_success()));
     QObject::connect(mythread,SIGNAL(do_message(QString)),&win,SLOT(deal_message(QString)));
     QObject::connect(mythread,SIGNAL(do_topic(QString,QString,QString,QString,QString,QString)),\
-                     &win,SLOT(deal_single_start(QString,QString,QString,QString,QString,QString)));
+                     &win,SLOT(deal_topic_start(QString,QString,QString,QString,QString,QString)));
 
     return a.exec();
 }

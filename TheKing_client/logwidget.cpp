@@ -46,14 +46,15 @@ LogWidget::~LogWidget()
 
 void LogWidget::on_login_Button_clicked()
 {
-    if(ui->name_lineEdit->text().isEmpty() || ui->pwd_lineEdit->text().isEmpty())
-    {
-        QMessageBox::warning(this,"警告","输入不可为空!",QMessageBox::Ok);
-    }
-    else
-    {
-        emit do_log_check(ui->name_lineEdit->text(),ui->pwd_lineEdit->text());
-    }
+//    if(ui->name_lineEdit->text().isEmpty() || ui->pwd_lineEdit->text().isEmpty())
+//    {
+//        QMessageBox::warning(this,"警告","输入不可为空!",QMessageBox::Ok);
+//    }
+//    else
+//    {
+//        emit do_log_check(ui->name_lineEdit->text(),ui->pwd_lineEdit->text());
+//    }
+    deal_log_success();
 }
 
 void LogWidget::on_reg_Button_clicked()

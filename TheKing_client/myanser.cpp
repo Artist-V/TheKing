@@ -22,7 +22,16 @@ MyAnser::MyAnser(QWidget *parent) :
 //
     yourscore = 0;
     yourtime = 0;
+
+
+////测试
+//    judge->test();
+//    deal_show();
+//    ui->stackedWidget->setCurrentIndex(2);
+//    judge->OpenTimer();
+//    OneTimerId->start(1000);
 }
+
 
 MyAnser::~MyAnser()
 {
@@ -63,6 +72,9 @@ void MyAnser::deal_show()
     ui->B_Button->setEnabled(true);
     ui->C_Button->setEnabled(true);
     ui->D_Button->setEnabled(true);
+
+    //计入题目数量
+    judge->SetTopicNum();
 
     if(!judge->Check_CurrentIndex())
     {
@@ -212,8 +224,10 @@ void MyAnser::on_OneMore_Button_clicked()
 
 void MyAnser::on_match_Button_clicked()
 {
-    //服务器请求,联机答题
-    emit do_online_match();
+//    ui->stackedWidget->setCurrentIndex(1);
+//    //服务器请求,联机答题
+//    emit do_online_match();
+    ui->stackedWidget->setCurrentIndex(3);
 }
 
 void MyAnser::on_A_Button_clicked()
