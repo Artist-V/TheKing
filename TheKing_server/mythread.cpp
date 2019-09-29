@@ -143,36 +143,39 @@ void MyThread:: deal_udp_read()
     QByteArray data;
     QDataStream in(&data,QIODevice::ReadOnly);
 
-    data = Usocket->readAll();
-
-    int type;
-    in >> type;
-
-    umsg_t umsg;
-    memset(&umsg,0,sizeof(umsg_t));
-    umsg.ip = Usocket->peerAddress().toString();
-    umsg.port = Usocket->peerPort();
-
-    switch(type)
+    while(Usocket->hasPendingDatagrams())
     {
-    //消息（广播）
-    case MESSAGE:
-        in >> umsg.name >> umsg.message;
-        emit do_udp_message(umsg);
+        data = Usocket->readAll();
 
-        break;
+        int type;
+        in >> type;
 
-    //请求答题
-    case REQUEST:
-        in >> umsg.name >> umsg.topic;
-        emit do_udp_message(umsg);
+        umsg_t umsg;
+        memset(&umsg,0,sizeof(umsg_t));
+        umsg.ip = Usocket->peerAddress().toString();
+        umsg.port = Usocket->peerPort();
 
-        //处理请求
-        deal_request(umsg.topic,umsg);
+        switch(type)
+        {
+        //消息（广播）
+        case MESSAGE:
+            in >> umsg.name >> umsg.message;
+            emit do_udp_message(umsg);
 
-        break;
+            break;
+
+        //请求答题
+        case REQUEST:
+            in >> umsg.name >> umsg.topic;
+            emit do_udp_message(umsg);
+
+            //处理请求
+            deal_request(umsg.topic,umsg);
+
+            break;
+        }
+
     }
-
 }
 
 void MyThread::Recv_topic(QString stem, QString a, QString b, QString c, QString d, int True, int room)
